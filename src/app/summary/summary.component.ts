@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { StatsService } from '../stats.service';
 
 @Component({
   selector: 'app-summary',
@@ -7,9 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SummaryComponent implements OnInit {
 
-  constructor() { }
+  constructor(public statsService: StatsService) { }
 
   ngOnInit(): void {
+    console.log('Summary component init')
+    this.statsService.getSummary();
   }
 
 }
