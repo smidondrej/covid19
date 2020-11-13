@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { SummaryComponent } from './summary/summary.component';
+import { WorldwideComponent } from './worldwide/worldwide.component';
 
 const routes: Routes = [
-  { path: "", component: SummaryComponent },
+  { path: "", component: WorldwideComponent },
   { path: "**", redirectTo: "" }
 ];
 

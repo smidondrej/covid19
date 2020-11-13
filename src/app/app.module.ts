@@ -12,12 +12,14 @@ import { AppComponent } from './app.component';
 import { environment } from 'src/environments/environment';
 import { SummaryComponent } from './summary/summary.component';
 import { CountriesComponent } from './countries/countries.component';
+import { WorldwideComponent } from './worldwide/worldwide.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SummaryComponent,
-    CountriesComponent
+    CountriesComponent,
+    WorldwideComponent
   ],
   imports: [
     BrowserModule,
