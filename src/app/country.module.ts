@@ -7,6 +7,9 @@ export class Country {
     newRecovered: number;
     totalRecovered: number;
     lastUpdate: Date;
+    active: number;
+    recoveryRate: number;
+    mortalityRate: number;
 
     constructor(
             name: String,
@@ -25,5 +28,9 @@ export class Country {
         this.newRecovered = newRecovered
         this.totalRecovered = totalRecovered
         this.lastUpdate = lastUpdated
+        this.active = totalConfirmed - totalRecovered - totalDeaths
+        // TODO: round 2 digits
+        this.recoveryRate = 100 / totalConfirmed * totalRecovered
+        this.mortalityRate = 100 / totalConfirmed * totalDeaths
     }
 }

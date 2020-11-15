@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Country } from '../country.module';
 import { StatsService } from '../stats.service';
 
 @Component({
@@ -8,11 +9,16 @@ import { StatsService } from '../stats.service';
 })
 export class SummaryComponent implements OnInit {
 
+  country: Country;
+
   constructor(public statsService: StatsService) { }
 
-  ngOnInit(): void {
-    console.log('Summary component init')
-    this.statsService.getSummary();
+  async ngOnInit() {
+    // console.log('Summary component init')
+    // this.statsService.getSummary();
+    this.country = await this.statsService.getCountry('Worldwide');
+    // console.log("Summary component")
+    // await console.log(this.country)
   }
 
 }

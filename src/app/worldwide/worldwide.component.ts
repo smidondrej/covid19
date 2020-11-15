@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Country } from '../country.module';
+import { StatsService } from '../stats.service';
 
 @Component({
   selector: 'app-worldwide',
@@ -7,9 +9,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WorldwideComponent implements OnInit {
 
-  constructor() { }
+  constructor(public statsService: StatsService) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
   }
 
 }
