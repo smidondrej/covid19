@@ -13,7 +13,6 @@
 
 <!-- Summary table -->
 <div class="my-3">
-    <ng-container *ngIf="summaryData">
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
@@ -22,42 +21,45 @@
                 </th>
             </tr>
         </thead>
+    </table>
+    <ng-container *ngIf="summaryData">
+    <table class="table table-bordered table-striped">
         <tbody>
                 <tr class="table-warning">
-                    <td>Total Cases</td>
-                    <td>{{ summaryData.Global.TotalConfirmed }}</td>
+                    <td class="text-left">Total Cases</td>
+                    <td class="text-right">{{ summaryData.Global.TotalConfirmed }}</td>
                 </tr>
                 <tr class="table-warning">
-                    <td>New Cases</td>
-                    <td>{{ summaryData.Global.NewConfirmed }}</td>
+                    <td class="text-left">New Cases</td>
+                    <td class="text-right">{{ summaryData.Global.NewConfirmed }}</td>
                 </tr>
                 <tr class="table-warning">
-                    <td>Active Cases</td>
-                    <td>{{ summaryData.Global.TotalConfirmed - summaryData.Global.TotalRecovered - summaryData.Global.TotalDeaths }}</td>
+                    <td class="text-left">Active Cases</td>
+                    <td class="text-right">{{ activeCases }}</td>
                 </tr>
                 <tr class="table-danger">
-                    <td>Total Recovered</td>
-                    <td>{{ summaryData.Global.TotalRecovered }}</td>
+                    <td class="text-left">Total Recovered</td>
+                    <td class="text-right">{{ summaryData.Global.TotalRecovered }}</td>
                 </tr>
                 <tr class="table-danger">
-                    <td>New Recovered</td>
-                    <td>{{ summaryData.Global.NewRecovered }}</td>
+                    <td class="text-left">New Recovered</td>
+                    <td class="text-right">{{ summaryData.Global.NewRecovered }}</td>
                 </tr>
                 <tr class="table-danger">
-                    <td>Recovery Rate</td>
-                    <td>{{ 100 / summaryData.Global.TotalConfirmed *  summaryData.Global.TotalRecovered | number : '.2-2' }}%</td>
+                    <td class="text-left">Recovery Rate</td>
+                    <td class="text-right">{{ recoveredCases | number : '.2-2' }}%</td>
                 </tr>
                 <tr class="table-primary">
-                    <td>Total Deaths</td>
-                    <td>{{ summaryData.Global.TotalDeaths }}</td>
+                    <td class="text-left">Total Deaths</td>
+                    <td class="text-right">{{ summaryData.Global.TotalDeaths }}</td>
                 </tr>
                 <tr class="table-primary">
-                    <td>New Deaths</td>
-                    <td>{{ summaryData.Global.NewDeaths }}</td>
+                    <td class="text-left">New Deaths</td>
+                    <td class="text-right">{{ summaryData.Global.NewDeaths }}</td>
                 </tr>
                 <tr class="table-primary">
-                    <td>Mortality Rate</td>
-                    <td>{{ 100 / summaryData.Global.TotalConfirmed *  summaryData.Global.TotalDeaths | number : '.2-2' }}%</td>
+                    <td class="text-left">Mortality Rate</td>
+                    <td class="text-right">{{ deadCases | number : '.2-2' }}%</td>
                 </tr>
         </tbody>
     </table>
@@ -65,50 +67,86 @@
 </div>
 
 <!-- Pie chart for summary -->
-<ng-container *ngIf="summaryData">
-<div class="chart-wrapper">
-    <canvas baseChart 
-    [data]="pieChartData" 
-    [labels]="pieChartLabels" 
-    [chartType]="pieChartType"
-    [options]="pieChartOptions"
-    [plugins]="pieChartPlugins"
-    [legend]="pieChartLegend">
-  </canvas>
+<div class="chart-wrapper my-5">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th colspan="2">
+                    Corona Virus Cases Distribution Worldwide
+                </th>
+            </tr>
+        </thead>
+    </table>
+    <ng-container *ngIf="summaryData">
+        <canvas baseChart 
+            [data]="pieChartData" 
+            [labels]="pieChartLabels" 
+            [chartType]="pieChartType"
+            [options]="pieChartOptions"
+            [plugins]="pieChartPlugins"
+            [legend]="pieChartLegend">
+        </canvas>
+    </ng-container>
 </div>
-</ng-container>
 
 <!-- Last 7 days -->
-<ng-container *ngIf="flag7">
-<div class="chart-wrapper">
-    <canvas baseChart 
-    [datasets]="barChartData"
-    [labels]="barChartLabels"
-    [options]="barChartOptions"
-    [plugins]="barChartPlugins"
-    [legend]="barChartLegend"
-    [chartType]="barChartType">
-  </canvas>
+<div class="chart-wrapper my-5">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th colspan="2">
+                    Daily Corona Virus Cases Worldwide
+                </th>
+            </tr>
+        </thead>
+    </table>
+    <ng-container *ngIf="flag7">
+        <canvas baseChart 
+            [datasets]="barChartData"
+            [labels]="barChartLabels"
+            [options]="barChartOptions"
+            [plugins]="barChartPlugins"
+            [legend]="barChartLegend"
+            [chartType]="barChartType">
+        </canvas>
+    </ng-container>
 </div>
-</ng-container>
 
 <!-- Historical worldwide development -->
-<ng-container *ngIf="flag">
-<div class="chart-wrapper">
-    <canvas baseChart 
-        [datasets]="lineChartData" 
-        [labels]="lineChartLabels"
-        [options]="lineChartOptions"
-        [colors]="lineChartColors" 
-        [legend]="lineChartLegend" 
-        [chartType]="lineChartType" 
-        [plugins]="lineChartPlugins">
-    </canvas>
+<div class="chart-wrapper my-5">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th colspan="2">
+                    Total Corona Virus Cases Worldwide
+                </th>
+            </tr>
+        </thead>
+    </table>
+    <ng-container *ngIf="flag">
+        <canvas baseChart 
+            [datasets]="lineChartData" 
+            [labels]="lineChartLabels"
+            [options]="lineChartOptions"
+            [colors]="lineChartColors" 
+            [legend]="lineChartLegend" 
+            [chartType]="lineChartType" 
+            [plugins]="lineChartPlugins">
+        </canvas>
+    </ng-container>
 </div>
-</ng-container>
 
 <!-- Table of countries -->
 <div class="my-3">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th colspan="2">
+                    Corona Virus Cases by Country
+                </th>
+            </tr>
+        </thead>
+    </table>
     <ng-container *ngIf="summaryData">
     <table class="table table-bordered table-striped">
         <thead>
@@ -124,15 +162,27 @@
         </thead>
         <tbody>
             <tr *ngFor="let country of countries">
-                <td class="table-secondary">{{ country.Country }}</td>
-                <td class="table-warning">{{ country.NewConfirmed }}</td>
-                <td class="table-warning">{{ country.TotalConfirmed }}</td>
-                <td class="table-primary">{{ country.NewRecovered }}</td>
-                <td class="table-primary">{{ country.TotalRecovered }}</td>
-                <td class="table-danger">{{ country.NewDeaths }}</td>
-                <td class="table-danger">{{ country.TotalDeaths }}</td>
+                <td class="table-secondary text-left">{{ country.Country }}</td>
+                <td class="table-warning text-right">{{ country.NewConfirmed }}</td>
+                <td class="table-warning text-right">{{ country.TotalConfirmed }}</td>
+                <td class="table-primary text-right">{{ country.NewRecovered }}</td>
+                <td class="table-primary text-right">{{ country.TotalRecovered }}</td>
+                <td class="table-danger text-right">{{ country.NewDeaths }}</td>
+                <td class="table-danger text-right">{{ country.TotalDeaths }}</td>
             </tr>
         </tbody>
     </table>
 </ng-container>
+</div>
+
+<div class="my-3">
+    <table class="table table-bordered table-striped text-center">
+        <thead>
+            <tr>
+                <th colspan="2">
+                    Data Source: <a href="https://covid19api.com">Covid-19 API / Johns Hopkins CSSE</a>
+                </th>
+            </tr>
+        </thead>
+    </table>
 </div>

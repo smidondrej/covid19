@@ -18,8 +18,9 @@ export class WorldwideComponent implements OnInit {
   summaryData: SummaryData;
   countries: Array<CountryData>;
   currentDate: string;
-  deadCases: number;
   activeCases: number;
+  deadCases: number;
+  recoveredCases: number;
 
   // Pie chart
   public pieChartOptions: ChartOptions = {
@@ -37,12 +38,6 @@ export class WorldwideComponent implements OnInit {
   lineChartOptions = {
     responsive: true,
   };
-  // lineChartColors: Color[] = [
-  //   {
-  //     borderColor: 'black',
-  //     backgroundColor: 'rgba(255,255,0,0.28)',
-  //   },
-  // ];
   lineChartLegend = true;
   lineChartPlugins = [];
   lineChartType = 'line';
@@ -64,7 +59,6 @@ export class WorldwideComponent implements OnInit {
   ngOnInit() {
     let date = new Date();
     this.currentDate = this.datePipe.transform(date,'dd-MMM-yyyy');
-    this.lineChartLabels = this.getDateArray(this.service.beginning);
     this.getAllData();
     this.get7DaysData();
     this.getAllHistoryData();
@@ -75,9 +69,10 @@ export class WorldwideComponent implements OnInit {
       this.service.getData().toPromise().then(
         (res: any) => {
           this.summaryData = res;
-          this.deadCases = 100 / this.summaryData.Global.TotalConfirmed *  this.summaryData.Global.TotalDeaths;
-          this.activeCases = 100 / this.summaryData.Global.TotalConfirmed *  this.summaryData.Global.TotalRecovered;
-          this.pieChartData = [this.deadCases, this.activeCases, 100 - this.deadCases - this.activeCases];
+          this.activeCases = this.summaryData.Global.TotalConfirmed - this.summaryData.Global.TotalRecovered - this.summaryData.Global.TotalDeaths;
+          this.deadCases = 100 / this.summaryData.Global.TotalConfirmed * this.summaryData.Global.TotalDeaths;
+          this.recoveredCases = 100 / this.summaryData.Global.TotalConfirmed * this.summaryData.Global.TotalRecovered;
+          this.pieChartData = [this.deadCases, this.recoveredCases, 100 - this.deadCases - this.recoveredCases];
           this.getSortedData();
         }
       )
@@ -114,6 +109,8 @@ export class WorldwideComponent implements OnInit {
   }
 
   getSortedHistoricalData(data) {
+    this.service.setBeginning(this.service.beginning);
+    this.lineChartLabels = this.getDateArray(this.service.beginning);
     let TotalConfirmed = [];
     let TotalRecovered = [];
     let TotalDeaths = [];
@@ -126,9 +123,9 @@ export class WorldwideComponent implements OnInit {
     TotalRecovered = this.getProper(TotalRecovered);
     TotalDeaths = this.getProper(TotalDeaths);
     this.lineChartData = [
-      { data: TotalConfirmed, label: 'Crude oil prices' },
-      { data: TotalRecovered, label: 'Crude oil prices' },
-      { data: TotalDeaths, label: 'Crude oil prices' },
+      { data: TotalDeaths, label: 'Total Deaths' },
+      { data: TotalRecovered, label: 'Total Recovered' },
+      { data: TotalConfirmed, label: 'Total Cases' },
     ];
   }
 
@@ -153,24 +150,20 @@ export class WorldwideComponent implements OnInit {
   }
 
   getLast7(data: Array<GlobalData>) {
-    console.log(data);
     let NewConfirmed = [];
     let NewRecovered = [];
     let NewDeaths = [];
     let day = new Date();
-    console.log(day);
-    day.setDate(day.getDate() - 6);
+    day.setDate(day.getUTCDate() - 6);
     data.forEach(element => {
       NewConfirmed.push(element.NewConfirmed);
       NewRecovered.push(element.NewRecovered);
       NewDeaths.push(element.NewDeaths);
     });
-    console.log(NewConfirmed);
-    console.log(NewRecovered);
     this.barChartData = [
-      { data: NewConfirmed, label: 'Crude oil prices' },
-      { data: NewRecovered, label: 'Crude oil prices' },
-      { data: NewDeaths, label: 'Crude oil prices' },
+      { data: NewDeaths, label: 'Daily Deaths' },
+      { data: NewRecovered, label: 'Daily Recovered' },
+      { data: NewConfirmed, label: 'Daily New Cases' },
     ];
     this.barChartLabels = this.getDateArray(day);
   }
