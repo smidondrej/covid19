@@ -6,18 +6,18 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 import { HttpClientModule } from "@angular/common/http";
-// import { MatCardModule } from '@angular/material/card';
-// import { MatSelectModule } from '@angular/material/select';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { environment } from 'src/environments/environment';
 import { WorldwideComponent } from './worldwide/worldwide.component';
+import { CountryComponent } from './country/country.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    WorldwideComponent
+    WorldwideComponent,
+    CountryComponent
   ],
   imports: [
     BrowserModule,

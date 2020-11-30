@@ -162,7 +162,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let country of countries">
-                <td class="table-secondary text-left">{{ country.Country }}</td>
+                <td class="table-secondary text-left"><a [routerLink]="['', country.Slug]">{{ country.Country }}</a></td>
                 <td class="table-warning text-right">{{ country.NewConfirmed }}</td>
                 <td class="table-warning text-right">{{ country.TotalConfirmed }}</td>
                 <td class="table-primary text-right">{{ country.NewRecovered }}</td>
