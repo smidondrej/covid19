@@ -1,73 +1,43 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { AngularFirestore } from '@angular/fire/firestore';
-import { Country } from './country.module';
-
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+  
 @Injectable({
   providedIn: 'root'
 })
 export class StatsService {
-
-  private country: Country;
-  private summary: any = [];
-
-  constructor(private http: HttpClient, private firestore: AngularFirestore) { }
-
-  public async getCountry(countryName: String) {
-    if(this.country == null || this.country.name == countryName) {
-      await this.fetchCountry(countryName);
-    }
-    return this.country;
-  }
-
-  async fetchCountry(countryName: String) {
-    try {
-      this.firestore.collection["countries"].doc(countryName).get().subscribe((doc) => {
-        this.summary = doc;
-      });
-    } catch(TypeError) {
-      console.log("no data in storage - I am fetching it");
-      await this.getSummary();
-      if(countryName == 'Worldwide') {
-        // global stats
-        let country: Country = new Country(
-          'Worldwide',
-          this.summary["Global"]["NewConfirmed"],
-          this.summary["Global"]["TotalConfirmed"],
-          this.summary["Global"]["NewDeaths"],
-          this.summary["Global"]["TotalDeaths"],
-          this.summary["Global"]["NewRecovered"],
-          this.summary["Global"]["TotalRecovered"],
-          new Date()
-        );
-        this.country = country;
-        // TODO: store data in firestore
-    //   } else {
-    //     // countries
-    //   }
-    // } else {
-    //   // firestore data
   
-      }
-    }
-    
+  constructor(private http: HttpClient) { }
+  private url: string = "https://api.covid19api.com/summary";
+  private url_history: string = "https://api.covid19api.com/world";
+  public beginning: Date = new Date('2020-04-13T00:00:00');
+  
+  getData(): Observable<any> {
+    return this.http.get(this.url)
+      .pipe((response) => response);
   }
 
-  async getSummary() {
-    const url = 'https://api.covid19api.com/summary';
-    const promise = new Promise((resolve, reject) => {
-      // url has to be a const
-      this.http.get(url).toPromise().then(
-        (res: any) => {
-          //Success
-          this.summary = res;
-          resolve();
-        },
-          err => {
-            reject(err);
-          }
-        );
-    });
-    return promise;
+  getWorldData(): Observable<any> {
+    console.log(this.beginning);
+    let url = this.url_history + "?from=" + this.beginning.toISOString() + "&to=" + (new Date()).toISOString()
+    console.log("call API " + url)
+    return this.http.get(url)
+      .pipe((response) => response);
   }
-}
+
+  get7DaysData(): Observable<any> {
+    let today = new Date();
+    let day = new Date();
+    day.setDate(today.getDate() - 6);
+    // let t = this.datePipe.transform(today, 'yyyy-mm-dd');
+    // t += 'T00:00:00';
+    // let d = this.datePipe.transform(day, 'yyyy-mm-dd');
+    // d += 'T00:00:00';
+    console.log(today);
+    console.log(day);
+    let url = this.url_history + "?from=" + day.toISOString() + "&to=" + today.toISOString();
+    console.log("call API " + url)
+    return this.http.get(url)
+      .pipe((response) => response);
+  }
+}  

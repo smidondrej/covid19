@@ -11,6 +11,128 @@
     </div>
 </div>
 
-<app-summary></app-summary>
+<!-- Summary table -->
+<div class="my-3">
+    <ng-container *ngIf="summaryData">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th colspan="2">
+                    Corona Virus Summary Worldwide
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="table-warning">
+                    <td>Total Cases</td>
+                    <td>{{ summaryData.Global.TotalConfirmed }}</td>
+                </tr>
+                <tr class="table-warning">
+                    <td>New Cases</td>
+                    <td>{{ summaryData.Global.NewConfirmed }}</td>
+                </tr>
+                <tr class="table-warning">
+                    <td>Active Cases</td>
+                    <td>{{ summaryData.Global.TotalConfirmed - summaryData.Global.TotalRecovered - summaryData.Global.TotalDeaths }}</td>
+                </tr>
+                <tr class="table-danger">
+                    <td>Total Recovered</td>
+                    <td>{{ summaryData.Global.TotalRecovered }}</td>
+                </tr>
+                <tr class="table-danger">
+                    <td>New Recovered</td>
+                    <td>{{ summaryData.Global.NewRecovered }}</td>
+                </tr>
+                <tr class="table-danger">
+                    <td>Recovery Rate</td>
+                    <td>{{ 100 / summaryData.Global.TotalConfirmed *  summaryData.Global.TotalRecovered | number : '.2-2' }}%</td>
+                </tr>
+                <tr class="table-primary">
+                    <td>Total Deaths</td>
+                    <td>{{ summaryData.Global.TotalDeaths }}</td>
+                </tr>
+                <tr class="table-primary">
+                    <td>New Deaths</td>
+                    <td>{{ summaryData.Global.NewDeaths }}</td>
+                </tr>
+                <tr class="table-primary">
+                    <td>Mortality Rate</td>
+                    <td>{{ 100 / summaryData.Global.TotalConfirmed *  summaryData.Global.TotalDeaths | number : '.2-2' }}%</td>
+                </tr>
+        </tbody>
+    </table>
+</ng-container>
+</div>
 
-<app-countries></app-countries>
+<!-- Pie chart for summary -->
+<ng-container *ngIf="summaryData">
+<div class="chart-wrapper">
+    <canvas baseChart 
+    [data]="pieChartData" 
+    [labels]="pieChartLabels" 
+    [chartType]="pieChartType"
+    [options]="pieChartOptions"
+    [plugins]="pieChartPlugins"
+    [legend]="pieChartLegend">
+  </canvas>
+</div>
+</ng-container>
+
+<!-- Last 7 days -->
+<ng-container *ngIf="flag7">
+<div class="chart-wrapper">
+    <canvas baseChart 
+    [datasets]="barChartData"
+    [labels]="barChartLabels"
+    [options]="barChartOptions"
+    [plugins]="barChartPlugins"
+    [legend]="barChartLegend"
+    [chartType]="barChartType">
+  </canvas>
+</div>
+</ng-container>
+
+<!-- Historical worldwide development -->
+<ng-container *ngIf="flag">
+<div class="chart-wrapper">
+    <canvas baseChart 
+        [datasets]="lineChartData" 
+        [labels]="lineChartLabels"
+        [options]="lineChartOptions"
+        [colors]="lineChartColors" 
+        [legend]="lineChartLegend" 
+        [chartType]="lineChartType" 
+        [plugins]="lineChartPlugins">
+    </canvas>
+</div>
+</ng-container>
+
+<!-- Table of countries -->
+<div class="my-3">
+    <ng-container *ngIf="summaryData">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th class="table-secondary">Country</th>
+                <th class="table-warning">New Cases</th>
+                <th class="table-warning">Total Cases</th>
+                <th class="table-primary">New Recoveries</th>
+                <th class="table-primary">Total Recoveries</th>
+                <th class="table-danger">New Deaths</th>
+                <th class="table-danger">Total Deaths</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let country of countries">
+                <td class="table-secondary">{{ country.Country }}</td>
+                <td class="table-warning">{{ country.NewConfirmed }}</td>
+                <td class="table-warning">{{ country.TotalConfirmed }}</td>
+                <td class="table-primary">{{ country.NewRecovered }}</td>
+                <td class="table-primary">{{ country.TotalRecovered }}</td>
+                <td class="table-danger">{{ country.NewDeaths }}</td>
+                <td class="table-danger">{{ country.TotalDeaths }}</td>
+            </tr>
+        </tbody>
+    </table>
+</ng-container>
+</div>
