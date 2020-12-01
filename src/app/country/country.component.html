@@ -7,25 +7,140 @@
         Covid-19
     </h1>
     <h2>Live Updates and Statistics</h2>
-    <table class="table table-bordered table-striped text-center">
-        <thead>
-            <tr>
-                <th colspan="2">
-                    worldwide > {{ name }}
-                </th>
-            </tr>
-        </thead>
-    </table>
+    <ng-container *ngIf="country">
+        <table class="table table-bordered table-striped text-center">
+            <thead>
+                <tr>
+                    <th>
+                        Worldwide <i class="fa fa-chevron-right" aria-hidden="true"></i> {{ country.Country }}
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </ng-container>
 </div>
 
+<!-- Summary table -->
 <div class="my-3">
-    <table class="table table-bordered table-striped text-center">
-        <thead>
-            <tr>
-                <th colspan="2">
-                    Data Source: <a href="https://covid19api.com">Covid-19 API / Johns Hopkins CSSE</a>
-                </th>
-            </tr>
-        </thead>
-    </table>
+    <ng-container *ngIf="country">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Corona Virus Summary in {{ country.Country }}
+                    </th>
+                </tr>
+            </thead>
+        </table>
+        <table class="table table-bordered table-striped">
+            <tbody>
+                <tr class="table-warning">
+                    <td class="text-left">Total Cases</td>
+                    <td class="text-right">{{ country.TotalConfirmed }}</td>
+                </tr>
+                <tr class="table-warning">
+                    <td class="text-left">New Cases</td>
+                    <td class="text-right">{{ country.NewConfirmed }}</td>
+                </tr>
+                <tr class="table-warning">
+                    <td class="text-left">Active Cases</td>
+                    <td class="text-right">{{ activeCases }}</td>
+                </tr>
+                <tr class="table-danger">
+                    <td class="text-left">Total Recovered</td>
+                    <td class="text-right">{{ country.TotalRecovered }}</td>
+                </tr>
+                <tr class="table-danger">
+                    <td class="text-left">New Recovered</td>
+                    <td class="text-right">{{ country.NewRecovered }}</td>
+                </tr>
+                <tr class="table-danger">
+                    <td class="text-left">Recovery Rate</td>
+                    <td class="text-right">{{ recoveredCases | number : '.2-2' }}%</td>
+                </tr>
+                <tr class="table-primary">
+                    <td class="text-left">Total Deaths</td>
+                    <td class="text-right">{{ country.TotalDeaths }}</td>
+                </tr>
+                <tr class="table-primary">
+                    <td class="text-left">New Deaths</td>
+                    <td class="text-right">{{ country.NewDeaths }}</td>
+                </tr>
+                <tr class="table-primary">
+                    <td class="text-left">Mortality Rate</td>
+                    <td class="text-right">{{ deadCases | number : '.2-2' }}%</td>
+                </tr>
+            </tbody>
+        </table>
+    </ng-container>
+</div>
+
+<!-- Pie chart for summary -->
+<div class="chart-wrapper my-5">
+    <ng-container *ngIf="country">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Corona Virus Cases Distribution in {{ country.Country }}
+                    </th>
+                </tr>
+            </thead>
+        </table>
+        <canvas baseChart 
+            [data]="pieChartData" 
+            [labels]="pieChartLabels" 
+            [chartType]="pieChartType"
+            [options]="pieChartOptions"
+            [plugins]="pieChartPlugins"
+            [legend]="pieChartLegend">
+        </canvas>
+    </ng-container>
+</div>
+
+<!-- Last 7 days -->
+<div class="chart-wrapper my-5">
+    <ng-container *ngIf="flag7 && country">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Daily Corona Virus Cases in {{ country.Country }}
+                    </th>
+                </tr>
+            </thead>
+        </table>
+        <canvas baseChart 
+            [datasets]="barChartData"
+            [labels]="barChartLabels"
+            [options]="barChartOptions"
+            [plugins]="barChartPlugins"
+            [legend]="barChartLegend"
+            [chartType]="barChartType">
+        </canvas>
+    </ng-container>
+</div>
+
+<!-- Historical worldwide development -->
+<div class="chart-wrapper my-5">
+    <ng-container *ngIf="flag && country">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Total Corona Virus Cases in {{ name }}
+                    </th>
+                </tr>
+            </thead>
+        </table>
+        <canvas baseChart 
+            [datasets]="lineChartData" 
+            [labels]="lineChartLabels"
+            [options]="lineChartOptions"
+            [colors]="lineChartColors" 
+            [legend]="lineChartLegend" 
+            [chartType]="lineChartType" 
+            [plugins]="lineChartPlugins">
+        </canvas>
+    </ng-container>
 </div>

@@ -5,7 +5,7 @@ import { WorldwideComponent } from './worldwide/worldwide.component';
 
 const routes: Routes = [
   { path: "", component: WorldwideComponent },
-  { path: ":contry", component: CountryComponent },
+  { path: ":country", component: CountryComponent },
   { path: "**", redirectTo: "" }
 ];
 

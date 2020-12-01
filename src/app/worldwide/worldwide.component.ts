@@ -143,7 +143,7 @@ export class WorldwideComponent implements OnInit {
   getProper(arr: Array<number>) {
     let i = 1;
     let len = arr.length;
-    for (i = 1; i < len + 1; i++) {
+    for (i = 1; i < len; i++) {
       arr[i] += arr[i-1];
     }
     return arr;

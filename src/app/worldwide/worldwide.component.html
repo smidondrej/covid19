@@ -16,7 +16,7 @@
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th colspan="2">
+                <th>
                     Corona Virus Summary Worldwide
                 </th>
             </tr>
@@ -71,7 +71,7 @@
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th colspan="2">
+                <th>
                     Corona Virus Cases Distribution Worldwide
                 </th>
             </tr>
@@ -94,7 +94,7 @@
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th colspan="2">
+                <th>
                     Daily Corona Virus Cases Worldwide
                 </th>
             </tr>
@@ -117,7 +117,7 @@
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th colspan="2">
+                <th>
                     Total Corona Virus Cases Worldwide
                 </th>
             </tr>
@@ -141,23 +141,45 @@
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th colspan="2">
+                <th>
                     Corona Virus Cases by Country
                 </th>
             </tr>
         </thead>
     </table>
+    <!-- TODO: sort tabl using: https://medium.com/nerd-for-tech/how-to-sort-table-rows-according-column-in-angular-9-b04fdafb4140 -->
     <ng-container *ngIf="summaryData">
     <table class="table table-bordered table-striped">
-        <thead>
+        <thead class="text-center">
             <tr>
-                <th class="table-secondary">Country</th>
-                <th class="table-warning">New Cases</th>
-                <th class="table-warning">Total Cases</th>
-                <th class="table-primary">New Recoveries</th>
-                <th class="table-primary">Total Recoveries</th>
-                <th class="table-danger">New Deaths</th>
-                <th class="table-danger">Total Deaths</th>
+                <th class="table-secondary">Country<br>
+                    <i class="fa fa-chevron-up" aria-hidden="true"></i>
+                    <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                </th>
+                <th class="table-warning">New Cases<br>
+                    <i class="fa fa-chevron-up" aria-hidden="true"></i>
+                    <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                </th>
+                <th class="table-warning">Total Cases<br>
+                    <i class="fa fa-chevron-up" aria-hidden="true"></i>
+                    <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                </th>
+                <th class="table-primary">New Recoveries<br>
+                    <i class="fa fa-chevron-up" aria-hidden="true"></i>
+                    <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                </th>
+                <th class="table-primary">Total Recoveries<br>
+                    <i class="fa fa-chevron-up" aria-hidden="true"></i>
+                    <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                </th>
+                <th class="table-danger">New Deaths<br>
+                    <i class="fa fa-chevron-up" aria-hidden="true"></i>
+                    <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                </th>
+                <th class="table-danger">Total Deaths<br>
+                    <i class="fa fa-chevron-up" aria-hidden="true"></i>
+                    <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -173,16 +195,4 @@
         </tbody>
     </table>
 </ng-container>
-</div>
-
-<div class="my-3">
-    <table class="table table-bordered table-striped text-center">
-        <thead>
-            <tr>
-                <th colspan="2">
-                    Data Source: <a href="https://covid19api.com">Covid-19 API / Johns Hopkins CSSE</a>
-                </th>
-            </tr>
-        </thead>
-    </table>
 </div>
