@@ -5,6 +5,7 @@ import { DatePipe } from '@angular/common';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, Label, SingleDataSet } from 'ng2-charts';
 import { element } from 'protractor';
+import { DatabaseService } from '../database.service';
 
 @Component({
   selector: 'app-worldwide',
@@ -54,7 +55,10 @@ export class WorldwideComponent implements OnInit {
   barChartData: ChartDataSets[];
   flag7: Boolean = false;
 
-  constructor(private service: StatsService, private datePipe: DatePipe) { }
+  constructor(
+    public dbService: DatabaseService,
+    private service: StatsService,
+    private datePipe: DatePipe) { }
 
   ngOnInit() {
     let date = new Date();

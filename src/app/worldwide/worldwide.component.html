@@ -9,6 +9,13 @@
         </h1>
         <h2>Live Updates and Statistics</h2>
     </div>
+    <div *ngIf="dbService.user == null;then content else other_content"></div>
+    <ng-template #content>
+        <button class="btn btn-info" (click)="dbService.signInWithGoogle()">Sign in with Google</button>
+    </ng-template>
+    <ng-template #other_content>
+        <button class="btn btn-danger" (click)="dbService.signOut()">Sign Out</button>
+    </ng-template>
 </div>
 
 <!-- Summary table -->
