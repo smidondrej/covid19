@@ -9,7 +9,7 @@
         </h1>
         <h2>Live Updates and Statistics</h2>
     </div>
-    <div *ngIf="dbService.user == null;then content else other_content"></div>
+    <div *ngIf="dbService.getUser() == null;then content else other_content"></div>
     <ng-template #content>
         <button class="btn btn-info" (click)="dbService.signInWithGoogle()">Sign in with Google</button>
     </ng-template>
@@ -203,3 +203,6 @@
     </table>
 </ng-container>
 </div>
+
+<!-- News -->
+<app-news></app-news>

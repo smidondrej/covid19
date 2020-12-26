@@ -57,7 +57,7 @@ export class CountryComponent implements OnInit {
   constructor(
         private actRoute: ActivatedRoute,
         private service: StatsService,
-        private dbService: DatabaseService,
+        public dbService: DatabaseService,
         private datePipe: DatePipe) {
     this.name = this.actRoute.snapshot.params.country;
   }
@@ -78,7 +78,7 @@ export class CountryComponent implements OnInit {
         this.recoveredCases = 100 / this.country.TotalConfirmed * this.country.TotalRecovered;
         this.pieChartData = [this.deadCases, this.recoveredCases, 100 - this.deadCases - this.recoveredCases];
       }
-      else if (this.country == null || this.country.Date.getUTCDate() == today.getUTCDate()) {
+      else {
         await this.getAllData();
       }
     });

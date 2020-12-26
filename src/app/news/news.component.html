@@ -1,0 +1,39 @@
+<div *ngIf="displayNewsEntry()">
+    <h4>Add new expenses</h4>
+    <form (ngSubmit)="addNews()">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <select name="selectCountry"
+                [(ngModel)] ="selectedCountry"
+                required>
+                    <option *ngFor="let country of countries" [ngValue]="country">{{ country.Country }}</option>
+                </select>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-12">
+                <label for="descriptionInput">Description</label>
+                <input type="text" id="descriptionInput" name="descriptionInput" class="form-control" placeholder="Enter your news."
+                [(ngModel)]="description"
+                required
+                />
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+</div>
+
+<div class="my-3">
+    <h4>News</h4>
+    <div ng-show="news?.lenght">
+        <table class="table table-bordered table-striped">
+            <tbody>
+                <tr *ngFor="let info of news">
+                    <td>{{ info.user }}</td>
+                    <td>{{ info.description }}</td>
+                    <td>{{ info.date | date:'dd MMM yyyy' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

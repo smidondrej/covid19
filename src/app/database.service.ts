@@ -4,6 +4,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { CountryData } from './country.module';
 import { User } from './user.module';
+import { News } from './news.module';
 
 @Injectable({
   providedIn: 'root'
@@ -69,5 +70,13 @@ export class DatabaseService {
     this.afAuth.signOut();
     localStorage.removeItem("user");
     this.user = null;
+  }
+
+  getNews(slug: string) {
+    return this.firestore.collection("countries").doc(slug).collection("news").valueChanges();
+  }
+
+  addNews(slug: string, news: News) {
+    this.firestore.collection("countries").doc(slug).collection("news").add(news);
   }
 }
