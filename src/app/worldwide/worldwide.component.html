@@ -34,23 +34,23 @@
         <tbody>
                 <tr class="table-warning">
                     <td class="text-left">Total Cases</td>
-                    <td class="text-right">{{ summaryData.Global.TotalConfirmed }}</td>
+                    <td class="text-right">{{ summaryData.Global.TotalConfirmed | number }}</td>
                 </tr>
                 <tr class="table-warning">
                     <td class="text-left">New Cases</td>
-                    <td class="text-right">{{ summaryData.Global.NewConfirmed }}</td>
+                    <td class="text-right">{{ summaryData.Global.NewConfirmed | number }}</td>
                 </tr>
                 <tr class="table-warning">
                     <td class="text-left">Active Cases</td>
-                    <td class="text-right">{{ activeCases }}</td>
+                    <td class="text-right">{{ activeCases | number }}</td>
                 </tr>
                 <tr class="table-danger">
                     <td class="text-left">Total Recovered</td>
-                    <td class="text-right">{{ summaryData.Global.TotalRecovered }}</td>
+                    <td class="text-right">{{ summaryData.Global.TotalRecovered | number }}</td>
                 </tr>
                 <tr class="table-danger">
                     <td class="text-left">New Recovered</td>
-                    <td class="text-right">{{ summaryData.Global.NewRecovered }}</td>
+                    <td class="text-right">{{ summaryData.Global.NewRecovered | number }}</td>
                 </tr>
                 <tr class="table-danger">
                     <td class="text-left">Recovery Rate</td>
@@ -58,11 +58,11 @@
                 </tr>
                 <tr class="table-primary">
                     <td class="text-left">Total Deaths</td>
-                    <td class="text-right">{{ summaryData.Global.TotalDeaths }}</td>
+                    <td class="text-right">{{ summaryData.Global.TotalDeaths | number }}</td>
                 </tr>
                 <tr class="table-primary">
                     <td class="text-left">New Deaths</td>
-                    <td class="text-right">{{ summaryData.Global.NewDeaths }}</td>
+                    <td class="text-right">{{ summaryData.Global.NewDeaths | number }}</td>
                 </tr>
                 <tr class="table-primary">
                     <td class="text-left">Mortality Rate</td>
@@ -155,49 +155,63 @@
         </thead>
     </table>
     <!-- TODO: sort tabl using: https://medium.com/nerd-for-tech/how-to-sort-table-rows-according-column-in-angular-9-b04fdafb4140 -->
-    <ng-container *ngIf="summaryData">
+    <ng-container *ngIf="countries">
     <table class="table table-bordered table-striped">
         <thead class="text-center">
             <tr>
                 <th class="table-secondary">Country<br>
-                    <i class="fa fa-chevron-up" aria-hidden="true"></i>
-                    <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                    <i class="fa fa-chevron-up" aria-hidden="true"
+                    [appSort]="countries" data-order="desc" data-name="Country" scope="col"></i>
+                    <i class="fa fa-chevron-down" aria-hidden="true"
+                    [appSort]="countries" data-order="asc" data-name="Country" scope="col"></i>
                 </th>
                 <th class="table-warning">New Cases<br>
-                    <i class="fa fa-chevron-up" aria-hidden="true"></i>
-                    <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                    <i class="fa fa-chevron-up" aria-hidden="true"
+                    [appSort]="countries" data-order="desc" data-name="NewConfirmed" scope="col"></i>
+                    <i class="fa fa-chevron-down" aria-hidden="true"
+                    [appSort]="countries" data-order="desc" data-name="NewConfirmed" scope="col"></i>
                 </th>
                 <th class="table-warning">Total Cases<br>
-                    <i class="fa fa-chevron-up" aria-hidden="true"></i>
-                    <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                    <i class="fa fa-chevron-up" aria-hidden="true"
+                    [appSort]="countries" data-order="desc" data-name="TotalConfirmed" scope="col"></i>
+                    <i class="fa fa-chevron-down" aria-hidden="true"
+                    [appSort]="countries" data-order="desc" data-name="TotalConfirmed" scope="col"></i>
                 </th>
                 <th class="table-primary">New Recoveries<br>
-                    <i class="fa fa-chevron-up" aria-hidden="true"></i>
-                    <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                    <i class="fa fa-chevron-up" aria-hidden="true"
+                    [appSort]="countries" data-order="desc" data-name="NewRecovered" scope="col"></i>
+                    <i class="fa fa-chevron-down" aria-hidden="true"
+                    [appSort]="countries" data-order="desc" data-name="NewRecovered" scope="col"></i>
                 </th>
                 <th class="table-primary">Total Recoveries<br>
-                    <i class="fa fa-chevron-up" aria-hidden="true"></i>
-                    <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                    <i class="fa fa-chevron-up" aria-hidden="true"
+                    [appSort]="countries" data-order="desc" data-name="TotalRecovered" scope="col"></i>
+                    <i class="fa fa-chevron-down" aria-hidden="true"
+                    [appSort]="countries" data-order="desc" data-name="TotalRecovered" scope="col"></i>
                 </th>
                 <th class="table-danger">New Deaths<br>
-                    <i class="fa fa-chevron-up" aria-hidden="true"></i>
-                    <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                    <i class="fa fa-chevron-up" aria-hidden="true"
+                    [appSort]="countries" data-order="desc" data-name="NewDeaths" scope="col"></i>
+                    <i class="fa fa-chevron-down" aria-hidden="true"
+                    [appSort]="countries" data-order="desc" data-name="NewDeaths" scope="col"></i>
                 </th>
                 <th class="table-danger">Total Deaths<br>
-                    <i class="fa fa-chevron-up" aria-hidden="true"></i>
-                    <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                    <i class="fa fa-chevron-up" aria-hidden="true"
+                    [appSort]="countries" data-order="desc" data-name="TotalDeaths" scope="col"></i>
+                    <i class="fa fa-chevron-down" aria-hidden="true"
+                    [appSort]="countries" data-order="desc" data-name="TotalDeaths" scope="col"></i>
                 </th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let country of countries">
                 <td class="table-secondary text-left"><a [routerLink]="['', country.Slug]">{{ country.Country }}</a></td>
-                <td class="table-warning text-right">{{ country.NewConfirmed }}</td>
-                <td class="table-warning text-right">{{ country.TotalConfirmed }}</td>
-                <td class="table-primary text-right">{{ country.NewRecovered }}</td>
-                <td class="table-primary text-right">{{ country.TotalRecovered }}</td>
-                <td class="table-danger text-right">{{ country.NewDeaths }}</td>
-                <td class="table-danger text-right">{{ country.TotalDeaths }}</td>
+                <td class="table-warning text-right">{{ country.NewConfirmed | number }}</td>
+                <td class="table-warning text-right">{{ country.TotalConfirmed | number }}</td>
+                <td class="table-primary text-right">{{ country.NewRecovered | number }}</td>
+                <td class="table-primary text-right">{{ country.TotalRecovered | number }}</td>
+                <td class="table-danger text-right">{{ country.NewDeaths | number }}</td>
+                <td class="table-danger text-right">{{ country.TotalDeaths | number }}</td>
             </tr>
         </tbody>
     </table>

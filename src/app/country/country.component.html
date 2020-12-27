@@ -43,23 +43,23 @@
             <tbody>
                 <tr class="table-warning">
                     <td class="text-left">Total Cases</td>
-                    <td class="text-right">{{ country.TotalConfirmed }}</td>
+                    <td class="text-right">{{ country.TotalConfirmed | number }}</td>
                 </tr>
                 <tr class="table-warning">
                     <td class="text-left">New Cases</td>
-                    <td class="text-right">{{ country.NewConfirmed }}</td>
+                    <td class="text-right">{{ country.NewConfirmed | number }}</td>
                 </tr>
                 <tr class="table-warning">
                     <td class="text-left">Active Cases</td>
-                    <td class="text-right">{{ activeCases }}</td>
+                    <td class="text-right">{{ activeCases | number }}</td>
                 </tr>
                 <tr class="table-danger">
                     <td class="text-left">Total Recovered</td>
-                    <td class="text-right">{{ country.TotalRecovered }}</td>
+                    <td class="text-right">{{ country.TotalRecovered | number }}</td>
                 </tr>
                 <tr class="table-danger">
                     <td class="text-left">New Recovered</td>
-                    <td class="text-right">{{ country.NewRecovered }}</td>
+                    <td class="text-right">{{ country.NewRecovered | number }}</td>
                 </tr>
                 <tr class="table-danger">
                     <td class="text-left">Recovery Rate</td>
@@ -67,11 +67,11 @@
                 </tr>
                 <tr class="table-primary">
                     <td class="text-left">Total Deaths</td>
-                    <td class="text-right">{{ country.TotalDeaths }}</td>
+                    <td class="text-right">{{ country.TotalDeaths | number }}</td>
                 </tr>
                 <tr class="table-primary">
                     <td class="text-left">New Deaths</td>
-                    <td class="text-right">{{ country.NewDeaths }}</td>
+                    <td class="text-right">{{ country.NewDeaths | number }}</td>
                 </tr>
                 <tr class="table-primary">
                     <td class="text-left">Mortality Rate</td>

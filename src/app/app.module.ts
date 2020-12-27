@@ -14,13 +14,15 @@ import { environment } from 'src/environments/environment';
 import { WorldwideComponent } from './worldwide/worldwide.component';
 import { CountryComponent } from './country/country.component';
 import { NewsComponent } from './news/news.component';
+import { SortDirective } from './directive/sort.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     WorldwideComponent,
     CountryComponent,
-    NewsComponent
+    NewsComponent,
+    SortDirective
   ],
   imports: [
     BrowserModule,
