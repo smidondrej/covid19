@@ -12,6 +12,7 @@ import { News } from './news.module';
 export class DatabaseService {
 
   public user: User;
+  admin: boolean;
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -36,6 +37,11 @@ export class DatabaseService {
     return this.firestore.collection("countries").doc(slug).valueChanges();
   }
 
+  getAdmin(user: User) {
+    console.log("get admins");
+    return this.firestore.collection("admins").doc(user.uid).get();
+  }
+
   async signInWithGoogle() {
     const credentials = await this.afAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
     this.user = {
@@ -43,6 +49,16 @@ export class DatabaseService {
       displayName: credentials.user.displayName,
       email: credentials.user.email
     };
+    this.getAdmin(this.user).subscribe((res: any) => {
+      let tmp = res;
+      if (tmp.get("email") == this.user.email) {
+        this.admin = true;
+        localStorage.setItem("admin", "true");
+      } else {
+        this.admin = false;
+        localStorage.setItem("admin", "false");
+      }
+    })
     localStorage.setItem("user", JSON.stringify(this.user));
     this.updateUserData();
   }
@@ -62,6 +78,13 @@ export class DatabaseService {
     return this.user;
   }
 
+  isAdmin() {
+    if(!this.admin && JSON.parse(localStorage.getItem("admin")) != null) {
+      this.admin = localStorage.getItem("admin") == "true";
+    }
+    return this.admin;
+  }
+
   userSignIn(): boolean {
     return JSON.parse(localStorage.getItem("user")) != null;
   }
@@ -70,6 +93,8 @@ export class DatabaseService {
     this.afAuth.signOut();
     localStorage.removeItem("user");
     this.user = null;
+    localStorage.removeItem("admin");
+    this.admin = false;
   }
 
   getNews(slug: string) {

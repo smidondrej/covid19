@@ -23,13 +23,11 @@ export class NewsComponent implements OnInit {
   constructor(
     private actRoute: ActivatedRoute,
     private service: StatsService,
-    public dbService: DatabaseService,
-    private datePipe: DatePipe) {
+    public dbService: DatabaseService) {
       this.slug = this.actRoute.snapshot.params.country;
       if (!this.slug) {
         this.slug = "worldwide";
       }
-      console.log(this.slug)
     }
 
   ngOnInit(): void {
@@ -40,7 +38,7 @@ export class NewsComponent implements OnInit {
   }
 
   displayNewsEntry(): boolean {
-    if (this.dbService.getUser() != null && this.countries?.length) {
+    if (this.dbService.isAdmin() && this.countries?.length) {
       return true;
     }
     return false;
@@ -63,8 +61,6 @@ export class NewsComponent implements OnInit {
   }
 
   addNews() {
-    console.log(this.selectedCountry)
-    console.log(this.description)
     let date = new Date();
     let news: News = {
       date: date.toISOString(),

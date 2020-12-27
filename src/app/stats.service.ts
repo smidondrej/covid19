@@ -54,37 +54,9 @@ export class StatsService {
       .pipe((response) => response);
   }
 
-  /**
-   * calls covid19 API to retrieve country data for the beggining of the crisis
-   * 
-   * @param slug - country.slug
-   */
-  getCountryData(slug: string): Observable<any> {
-    this.countryBeginning = new Date();
-    this.setCountryBeginning(this.countryBeginning);
-    let today = new Date();
-    today.setUTCHours(0,0,0,0);
-    console.log("Asking for a data from=" + this.countryBeginning + " to=" + today);
-    let url = this.url_country_history + slug + "?from=" + this.countryBeginning.toISOString() + "&to=" + today.toISOString()
-    console.log("call API " + url)
-    return this.http.get(url)
-      .pipe((response) => response);
-  }
-
-  /**
-   * calls covid19 API to retrieve country data for last seven days
-   * 
-   * @param slug - country.slug
-   */
-  get7DaysCountryData(slug: string): Observable<any> {
-    let today = new Date();
-    today.setUTCHours(0,0,0,0);
-    let day = new Date();
-    day.setUTCDate(today.getUTCDate() - 6);
-    day.setUTCHours(0,0,0,0);
-    console.log("Asking for a data from=" + day + " to=" + today);
-    let url = this.url_country_history + slug + "?from=" + day.toISOString() + "&to=" + today.toISOString();
-    console.log("call API " + url)
+  getCData(slug: string): Observable<any> {
+    let url = "https://api.covid19api.com/total/dayone/country/" + slug;
+    console.log("call API " + url);
     return this.http.get(url)
       .pipe((response) => response);
   }
@@ -96,17 +68,6 @@ export class StatsService {
    */
   public setBeginning(date: Date) {
     date.setUTCFullYear(2020, 3, 13);
-    date.setUTCHours(0,0,0,0);
-    return date;
-  }
-
-  /**
-   * This sets date of API first record: 2020-03-13
-   * 
-   * @param date is a a date to be set
-   */
-  public setCountryBeginning(date: Date) {
-    date.setUTCFullYear(2020, 0, 22);
     date.setUTCHours(0,0,0,0);
     return date;
   }

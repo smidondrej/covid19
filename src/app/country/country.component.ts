@@ -20,7 +20,6 @@ export class CountryComponent implements OnInit {
   activeCases: number;
   deadCases: number;
   recoveredCases: number;
-  private provinces: number;
 
   // Pie chart
   public pieChartOptions: ChartOptions = {
@@ -65,8 +64,7 @@ export class CountryComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.getSummary();
-    await this.get7DaysData();
-    await this.getAllHistoryData();
+    await this.getCData();
   }
 
   async getSummary() {
@@ -106,11 +104,12 @@ export class CountryComponent implements OnInit {
     return promise;
   }
 
-  async getAllHistoryData() {
+  async getCData() {
     const promise = new Promise((resolve, reject) =>  {
-      this.service.getCountryData(this.name).toPromise().then(
+      this.service.getCData(this.name).toPromise().then(
         (res: any) => {
           this.getSortedHistoricalData(res);
+          this.getLastWeek(res);
           this.flag = true;
         }
       )
@@ -118,19 +117,17 @@ export class CountryComponent implements OnInit {
     return promise;
   }
 
-  // FIXME: for some countries not working properly, apparently problem with provinces
   getSortedHistoricalData(data: Array<CountryByDayData>) {
-    this.service.setCountryBeginning(this.service.countryBeginning);
-    this.lineChartLabels = this.getDateArray(this.service.countryBeginning);
-    let Confirmed = new Array(data.length / this.provinces).fill(0);
-    let Recovered = new Array(data.length / this.provinces).fill(0);
-    let Deaths = new Array(data.length / this.provinces).fill(0);
-    for (let i = 0; i < data.length; i++) {
-      let idx = Math.floor(i / this.provinces)
-      Confirmed[idx] += data[i].Confirmed;
-      Recovered[idx] += data[i].Recovered;
-      Deaths[idx] += data[i].Deaths;
-    }
+    let Confirmed = [];
+    let Recovered = [];
+    let Deaths = [];
+    this.lineChartLabels = [];
+    data.forEach(element => {
+      Confirmed.push(element.Confirmed);
+      Recovered.push(element.Recovered);
+      Deaths.push(element.Deaths);
+      this.lineChartLabels.push(this.datePipe.transform(element.Date, 'dd MMM'));
+    });
     this.lineChartData = [
       { data: Deaths, label: 'Total Deaths' },
       { data: Recovered, label: 'Total Recovered' },
@@ -138,48 +135,22 @@ export class CountryComponent implements OnInit {
     ];
   }
 
-  async get7DaysData() {
-    const promise = new Promise((resolve, reject) =>  {
-      this.service.get7DaysCountryData(this.name).toPromise().then(
-        (res: any) => {
-          this.getLast7(res);
-          this.flag7 = true;
-        }
-      )
-    })
-    return promise;
-  }
-
-  getLast7(data: Array<CountryByDayData>) {
-    let Confirmed = [0, 0, 0, 0, 0, 0];
-    let Recovered = [0, 0, 0, 0, 0, 0];
-    let Deaths = [0, 0, 0, 0, 0, 0];
-    let day = new Date();
-    day.setDate(day.getUTCDate() - 6);
-    this.provinces = data.length / 6;
-    // TODO: download eight days (seven previous and subtract them to get daily increment)
-    for (let i = 0; i < data.length; i++) {
-      let idx = Math.floor(i / this.provinces)
-      Confirmed[idx] += data[i].Confirmed;
-      Recovered[idx] += data[i].Recovered;
-      Deaths[idx] += data[i].Deaths;
+  getLastWeek(data: Array<CountryByDayData>) {
+    let Confirmed = [];
+    let Recovered = [];
+    let Deaths = [];
+    this.barChartLabels = [];
+    let len = data.length;
+    for (let i = 0; i < 7; i++) {
+      Confirmed.push(data[len - 7 + i].Confirmed - data[len - 7 + i - 1].Confirmed);
+      Recovered.push(data[len - 7 + i].Recovered - data[len - 7 + i - 1].Recovered);
+      Deaths.push(data[len - 7 + i].Deaths - data[len - 7 + i - 1].Deaths);
+      this.barChartLabels.push(this.datePipe.transform(data[len - 7 + i].Date, 'dd MMM'));
     }
     this.barChartData = [
       { data: Deaths, label: 'Daily Deaths' },
       { data: Recovered, label: 'Daily Recovered' },
       { data: Confirmed, label: 'Daily New Cases' },
     ];
-    this.barChartLabels = this.getDateArray(day);
-  }
-
-  getDateArray(start: Date) {
-    let arr = new Array;
-    let today = new Date();
-    let dt = start;
-    while (dt <= today) {
-      arr.push(this.datePipe.transform(new Date(dt), 'dd MMM'));
-      dt.setDate(dt.getDate() + 1);
-    }
-    return arr;
   }
 }

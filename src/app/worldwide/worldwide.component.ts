@@ -78,7 +78,6 @@ export class WorldwideComponent implements OnInit {
           this.recoveredCases = 100 / this.summaryData.Global.TotalConfirmed * this.summaryData.Global.TotalRecovered;
           this.pieChartData = [this.deadCases, this.recoveredCases, 100 - this.deadCases - this.recoveredCases];
           this.countries = this.summaryData.Countries;
-          // this.getSortedData();
         }
       )
     })
@@ -108,10 +107,6 @@ export class WorldwideComponent implements OnInit {
     })
     return promise;
   }
-  
-  // getSortedData() {
-  //   this.countries = this.summaryData.Countries;
-  // }
 
   getSortedHistoricalData(data) {
     this.service.setBeginning(this.service.beginning);
