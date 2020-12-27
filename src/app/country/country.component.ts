@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Label, SingleDataSet } from 'ng2-charts';
 import { CountryByDayData, CountryData } from '../country.module';
@@ -56,6 +56,7 @@ export class CountryComponent implements OnInit {
 
   constructor(
         private actRoute: ActivatedRoute,
+        private router: Router,
         private service: StatsService,
         public dbService: DatabaseService,
         private datePipe: DatePipe) {
@@ -64,8 +65,8 @@ export class CountryComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.getSummary();
-    this.get7DaysData();
-    this.getAllHistoryData();
+    await this.get7DaysData();
+    await this.getAllHistoryData();
   }
 
   async getSummary() {
@@ -90,18 +91,22 @@ export class CountryComponent implements OnInit {
         async (res: any) => {
           let summaryData = res;
           this.country = summaryData.Countries.find(x => x.Slug == this.name);
+          if (this.country) {
           this.activeCases = this.country.TotalConfirmed - this.country.TotalRecovered - this.country.TotalDeaths;
           this.deadCases = 100 / this.country.TotalConfirmed * this.country.TotalDeaths;
           this.recoveredCases = 100 / this.country.TotalConfirmed * this.country.TotalRecovered;
           this.pieChartData = [this.deadCases, this.recoveredCases, 100 - this.deadCases - this.recoveredCases];
           await this.dbService.updateCountry(this.country);
+          } else {
+            this.router.navigate([""]);
+          }
         }
       )
     })
     return promise;
   }
 
-  getAllHistoryData() {
+  async getAllHistoryData() {
     const promise = new Promise((resolve, reject) =>  {
       this.service.getCountryData(this.name).toPromise().then(
         (res: any) => {
@@ -133,7 +138,7 @@ export class CountryComponent implements OnInit {
     ];
   }
 
-  get7DaysData() {
+  async get7DaysData() {
     const promise = new Promise((resolve, reject) =>  {
       this.service.get7DaysCountryData(this.name).toPromise().then(
         (res: any) => {
