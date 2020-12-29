@@ -38,7 +38,6 @@ export class DatabaseService {
   }
 
   getAdmin(user: User) {
-    console.log("get admins");
     return this.firestore.collection("admins").doc(user.uid).get();
   }
 

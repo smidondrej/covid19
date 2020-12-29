@@ -46,7 +46,7 @@ export class CountryComponent implements OnInit {
   barChartOptions: ChartOptions = {
     responsive: true,
   };
-  barChartLabels: Label[];
+  barChartLabels: Label[] = [];
   barChartType: ChartType = 'bar';
   barChartLegend = true;
   barChartPlugins = [];
@@ -69,13 +69,18 @@ export class CountryComponent implements OnInit {
 
   async getSummary() {
     this.dbService.getCountry(this.name).subscribe(async (country: CountryData) => {
-      let today = new Date();
       if (country) {
-        this.country = country;
-        this.activeCases = this.country.TotalConfirmed - this.country.TotalRecovered - this.country.TotalDeaths;
-        this.deadCases = 100 / this.country.TotalConfirmed * this.country.TotalDeaths;
-        this.recoveredCases = 100 / this.country.TotalConfirmed * this.country.TotalRecovered;
-        this.pieChartData = [this.deadCases, this.recoveredCases, 100 - this.deadCases - this.recoveredCases];
+        let today = new Date();
+        let storageDate = new Date(country.Date);
+        if (this.datePipe.transform(today, 'dd-MM-yyyy') == this.datePipe.transform(storageDate, 'dd-MM-yyyy')) {
+          this.country = country;
+          this.activeCases = this.country.TotalConfirmed - this.country.TotalRecovered - this.country.TotalDeaths;
+          this.deadCases = 100 / this.country.TotalConfirmed * this.country.TotalDeaths;
+          this.recoveredCases = 100 / this.country.TotalConfirmed * this.country.TotalRecovered;
+          this.pieChartData = [this.deadCases, this.recoveredCases, 100 - this.deadCases - this.recoveredCases];
+        } else {
+          await this.getAllData();
+        }
       }
       else {
         await this.getAllData();
@@ -139,7 +144,6 @@ export class CountryComponent implements OnInit {
     let Confirmed = [];
     let Recovered = [];
     let Deaths = [];
-    this.barChartLabels = [];
     let len = data.length;
     for (let i = 0; i < 7; i++) {
       Confirmed.push(data[len - 7 + i].Confirmed - data[len - 7 + i - 1].Confirmed);

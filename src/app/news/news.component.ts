@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CountryData } from '../country.module';
+import { CountryData, GlobalData, SummaryData } from '../country.module';
 import { DatabaseService } from '../database.service';
 import { News } from '../news.module';
 import { StatsService } from '../stats.service';
@@ -32,7 +32,6 @@ export class NewsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllCountries();
-    // this.getNews();
   }
 
   displayNewsEntry(): boolean {
@@ -43,20 +42,15 @@ export class NewsComponent implements OnInit {
   }
 
   getAllCountries() {
-    const promise = new Promise((resolve, reject) =>  {
-      this.service.getData().toPromise().then(
-        (res: any) => {
-          let summaryData = res;
-          this.countries = summaryData.Countries;
-          let worldwide = new CountryData;
-          worldwide.Country = "Worldwide";
-          worldwide.Slug = "worldwide";
-          this.countries.push(worldwide);
-          this.getNews();
-        }
-      )
+    this.service.getData().subscribe((res: SummaryData) => {
+      let summaryData = res;
+      this.countries = summaryData.Countries;
+      let worldwide = new CountryData;
+      worldwide.Country = "Worldwide";
+      worldwide.Slug = "worldwide";
+      this.countries.push(worldwide);
+      this.getNews();
     })
-    return promise;
   }
 
   async getNews() {
@@ -67,8 +61,6 @@ export class NewsComponent implements OnInit {
           news.forEach(elem => {
             this.news.push(elem)
           });
-          // this.news.concat(news);
-          console.log(element.Slug, this.news);
         });
       });
     } else {

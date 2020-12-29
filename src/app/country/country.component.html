@@ -12,7 +12,9 @@
             <thead>
                 <tr>
                     <th>
-                        Worldwide <i class="fa fa-chevron-right" aria-hidden="true"></i> {{ country.Country }}
+                        <div class = "mt-3, text-center" *ngIf = "country">
+                            <b><a href="">Worldwide</a> <i class="fa fa-chevron-right" aria-hidden="true"></i> {{ country.Country }}</b>
+                        </div>
                     </th>
                 </tr>
             </thead>

@@ -48,7 +48,7 @@ export class WorldwideComponent implements OnInit {
   barChartOptions: ChartOptions = {
     responsive: true,
   };
-  barChartLabels: Label[];
+  barChartLabels: Label[] = [];
   barChartType: ChartType = 'bar';
   barChartLegend = true;
   barChartPlugins = [];
@@ -119,9 +119,9 @@ export class WorldwideComponent implements OnInit {
       TotalRecovered.push(element.TotalRecovered);
       TotalDeaths.push(element.TotalDeaths);
     });
-    TotalConfirmed = this.getProper(TotalConfirmed);
-    TotalRecovered = this.getProper(TotalRecovered);
-    TotalDeaths = this.getProper(TotalDeaths);
+    TotalConfirmed = TotalConfirmed.sort((a, b) => a - b)
+    TotalRecovered = TotalRecovered.sort((a, b) => a - b)
+    TotalDeaths = TotalDeaths.sort((a, b) => a - b)
     this.lineChartData = [
       { data: TotalDeaths, label: 'Total Deaths' },
       { data: TotalRecovered, label: 'Total Recovered' },
@@ -140,31 +140,27 @@ export class WorldwideComponent implements OnInit {
     return arr;
   }
 
-  getProper(arr: Array<number>) {
-    let i = 1;
-    let len = arr.length;
-    for (i = 1; i < len; i++) {
-      arr[i] += arr[i-1];
-    }
-    return arr;
-  }
-
   getLast7(data: Array<GlobalData>) {
+    data = data.sort((a, b) => a.TotalConfirmed - b.TotalConfirmed)
     let NewConfirmed = [];
     let NewRecovered = [];
     let NewDeaths = [];
+    let len = data.length
+    for (let i = 0; i < 7; i++) {
+      NewConfirmed.push(data[len - i - 1].NewConfirmed);
+      NewRecovered.push(data[len - i - 1].NewRecovered);
+      NewDeaths.push(data[len - i - 1].NewDeaths);
+    }
+    NewConfirmed.push(0);
+    NewRecovered.push(0);
+    NewDeaths.push(0);
     let day = new Date();
-    day.setDate(day.getUTCDate() - 6);
-    data.forEach(element => {
-      NewConfirmed.push(element.NewConfirmed);
-      NewRecovered.push(element.NewRecovered);
-      NewDeaths.push(element.NewDeaths);
-    });
+    day.setDate(day.getUTCDate() - 7);
+    this.barChartLabels = this.getDateArray(day);
     this.barChartData = [
       { data: NewDeaths, label: 'Daily Deaths' },
       { data: NewRecovered, label: 'Daily Recovered' },
       { data: NewConfirmed, label: 'Daily New Cases' },
     ];
-    this.barChartLabels = this.getDateArray(day);
   }
 }

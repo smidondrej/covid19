@@ -28,7 +28,6 @@ export class StatsService {
   getWorldData(): Observable<any> {
     this.setBeginning(this.beginning);
     let today = new Date();
-    today.setUTCHours(0,0,0,0);
     console.log("Asking for a data from=" + this.beginning + " to=" + today);
     let url = this.url_history + "?from=" + this.beginning.toISOString() + "&to=" + today.toISOString()
     console.log("call API " + url)
@@ -43,7 +42,7 @@ export class StatsService {
     let today = new Date();
     today.setUTCHours(0,0,0,0);
     let day = new Date();
-    day.setUTCDate(day.getUTCDate() - 6);
+    day.setUTCDate(day.getUTCDate() - 7);
     day.setUTCHours(0,0,0,0);
     console.log("Asking for a data from=" + day + " to=" + today);
     let url = this.url_history + "?from=" + day.toISOString() + "&to=" + today.toISOString();
