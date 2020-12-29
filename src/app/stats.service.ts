@@ -10,8 +10,6 @@ export class StatsService {
   constructor(private http: HttpClient) { }
   private url: string = "https://api.covid19api.com/summary";
   private url_history: string = "https://api.covid19api.com/world";
-  // TODO: correct call for country data (not working for france)
-  private url_country_history: string = "https://api.covid19api.com/country/";
   public beginning: Date = new Date();
   public countryBeginning: Date;
   

@@ -14,7 +14,7 @@ import { DatePipe } from '@angular/common';
 })
 export class NewsComponent implements OnInit {
 
-  news: News[];
+  news: News[] = [];
   selectedCountry: CountryData;
   description: string;
   countries: CountryData[];
@@ -32,9 +32,7 @@ export class NewsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllCountries();
-    this.dbService.getNews(this.slug).subscribe((news: News[]) => {
-      this.news = news;
-    });
+    // this.getNews();
   }
 
   displayNewsEntry(): boolean {
@@ -54,15 +52,36 @@ export class NewsComponent implements OnInit {
           worldwide.Country = "Worldwide";
           worldwide.Slug = "worldwide";
           this.countries.push(worldwide);
+          this.getNews();
         }
       )
     })
     return promise;
   }
 
+  async getNews() {
+    if (this.slug == "worldwide") {
+      this.news = [];
+      this.countries.forEach(async (element) => {
+        this.dbService.getNews(element.Slug).subscribe((news: News[]) => {
+          news.forEach(elem => {
+            this.news.push(elem)
+          });
+          // this.news.concat(news);
+          console.log(element.Slug, this.news);
+        });
+      });
+    } else {
+      this.dbService.getNews(this.slug).subscribe((news: News[]) => {
+        this.news = news;
+      });
+    }
+  }
+
   addNews() {
     let date = new Date();
     let news: News = {
+      country: this.selectedCountry.Country,
       date: date.toISOString(),
       uid: this.dbService.user.uid,
       user: this.dbService.user.displayName,

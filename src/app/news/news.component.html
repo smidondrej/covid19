@@ -26,14 +26,12 @@
 <div class="my-3">
     <h4>News</h4>
     <div ng-show="news?.lenght">
-        <table class="table table-bordered table-striped">
-            <tbody>
-                <tr *ngFor="let info of news">
-                    <td>{{ info.user }}</td>
-                    <td>{{ info.description }}</td>
-                    <td>{{ info.date | date:'dd MMM yyyy' }}</td>
-                </tr>
-            </tbody>
-        </table>
+        <div *ngFor="let info of news">
+            <div>
+                <p class="text-right">{{ info.country }}</p>
+                <p>{{ info.description }}</p>
+                <p class="text-right">{{ info.user }} on {{ info.date | date:'dd MMM yyyy' }}</p>
+            </div>
+        </div>
     </div>
 </div>
