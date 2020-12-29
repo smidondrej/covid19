@@ -28,10 +28,8 @@ export class SortDirective {
 
     if (order === "desc") {
       this.appSort.sort(sort.startSort(property, order, type));
-      elem.setAttribute("data-order", "asc");
     } else {
       this.appSort.sort(sort.startSort(property, order, type));
-      elem.setAttribute("data-order", "desc");
     }
 
   }
