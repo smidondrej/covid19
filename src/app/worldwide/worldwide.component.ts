@@ -111,6 +111,9 @@ export class WorldwideComponent implements OnInit {
   getSortedHistoricalData(data) {
     this.service.setBeginning(this.service.beginning);
     this.lineChartLabels = this.getDateArray(this.service.beginning);
+    // This is the right sorting (sort by one field only), but it is not giving good curve,
+    // because TotalRecovered has to be non-decreasing function
+    // data = data.sort((a, b) => a.TotalConfirmed - b.TotalConfirmed)
     let TotalConfirmed = [];
     let TotalRecovered = [];
     let TotalDeaths = [];
@@ -147,16 +150,23 @@ export class WorldwideComponent implements OnInit {
     let NewDeaths = [];
     let len = data.length
     for (let i = 0; i < 7; i++) {
-      NewConfirmed.push(data[len - i - 1].NewConfirmed);
-      NewRecovered.push(data[len - i - 1].NewRecovered);
-      NewDeaths.push(data[len - i - 1].NewDeaths);
+      if (i < len) {
+        NewConfirmed.push(data[i].NewConfirmed);
+        NewRecovered.push(data[i].NewRecovered);
+        NewDeaths.push(data[i].NewDeaths);
+      } else {
+        // normally this shouldn't be needed but API is not not very well behaved and sometimes returns
+        // less days than 7 and without dates no one can say which day is missing
+        NewConfirmed.push(0);
+        NewRecovered.push(0);
+        NewDeaths.push(0);
+      }
     }
-    NewConfirmed.push(0);
-    NewRecovered.push(0);
-    NewDeaths.push(0);
     let day = new Date();
     day.setDate(day.getUTCDate() - 7);
-    this.barChartLabels = this.getDateArray(day);
+    let dates = this.getDateArray(day);
+    dates.pop();
+    this.barChartLabels = dates;
     this.barChartData = [
       { data: NewDeaths, label: 'Daily Deaths' },
       { data: NewRecovered, label: 'Daily Recovered' },
